@@ -191,3 +191,9 @@ header {
   margin-bottom: 0;
 }
 
+.deplogo {
+  position:fixed;
+  bottom:1rem;
+  right:1rem;
+}
+
