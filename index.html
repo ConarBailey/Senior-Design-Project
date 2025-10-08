@@ -7,11 +7,19 @@
 </head>
 <body>
   <header>
-    <div class="logo">Calorie_Counter</div>
-    <a href="#" class="user-account">UserAccount</a>
+    <img class="logo" src="img/logo.png" width="90" height="90">
+    <a href="#" class="user-account">Account Settings</a>
   </header>
 
   <main>
+    <div class="add" id="add">
+      <div class="meal-input-wrapper" id="meal-input">
+       <input placeholder="Meal name" name="mealName" class="meal-input-box">
+       <br>
+       <br>
+       <button class="meal-input-button" onclick="closeMealAdd()"><b>Enter</b></button>
+      </div>	
+    </div>
     <section class="calories">
       <div class="frame1">
       <h2>Remaining: <span>1718</span></h2>
@@ -20,24 +28,18 @@
 
     <section class="meal">
       <div class="frame3">
+        <br>
         <h3>Breakfast</h3>
       </div>
       <div class="frame2">
-      <ul class="meal-list">
-        <li>
-          <span class="food-name">Ground Beef</span>
-          <span class="food-details">1 Cups, 308 Calories</span>
+      <div class="meal-list">
+          <div class="food-name">Ground Beef</div>
           <button class="edit-btn">✎</button>
-        </li>
-        <li>
-          <span class="food-name">Mashed Potatoes</span>
-          <span class="food-details">2 Cups, 474 Calories</span>
-          <button class="edit-btn">✎</button>
-        </li>
+          <div class="food-details">1 Cups<br>308 Calories</div>
       </ul>
       </div>
-      <button class="add-meal">+ Add Meal</button>
     </section>
+    <button class="add-meal" onclick="openMealAdd()"><b>Add Meal</b></button>
   </main>
 </body>
 <script src = "calorieCounter.js"></script>
