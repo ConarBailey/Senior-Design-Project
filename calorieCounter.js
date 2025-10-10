@@ -11,6 +11,7 @@
     {   
         numberofMeals++;
         var mealName = document.getElementById("mealName").value;
+        if (mealName=="") {mealName="Undefined";};
         document.getElementById("mealName").value = "";
         const listItem = document.createElement("li");
         listItem.id = "meal" + numberofMeals;
@@ -20,15 +21,21 @@
         const mealNameCont = document.createElement("h3");
         mealNameCont.innerHTML = mealName;
         firstFrame.className = "frame3";
-        firstFrame.appendChild(document.createElement("br"));
         firstFrame.appendChild(mealNameCont);
+        const mealDeleteButton = document.createElement("button");
+        mealDeleteButton.className = "mealDeleteButton";
+        mealDeleteButton.addEventListener("click", (event) => {deleteMeal(listItem.id)});
+        mealDeleteButton.innerHTML = "&#10006";
+        firstFrame.appendChild(mealDeleteButton);
         const secondFrame = document.createElement("div");
         secondFrame.className = "frame2";
-        const foodNameCont = document.createElement("div");
-        foodNameCont.className = "food-name";
-        const editButton = document.createElement("button");
-        editButton.className = "edit-btn";
-        editButton.innerHTML = "✎";
+        secondFrame.id = listItem.id+"-food-frame";
+        const foodAddButton = document.createElement("button");
+        foodAddButton.className = "add-food";
+        foodAddButton.append(document.createElement("b"));
+        foodAddButton.firstChild.innerHTML = "Add food";
+        foodAddButton.id = secondFrame.id +"button";
+        foodAddButton.addEventListener( "click", (event) => {addFood(foodAddButton.id)});
 
         document.getElementById("add").style.display="none";
         document.getElementById("meal-input").style.display="none";
@@ -37,5 +44,32 @@
         listItem.append(section);
         section.append(firstFrame);
         section.append(secondFrame); 
+        secondFrame.append(document.createElement("br"));
+        secondFrame.append(foodAddButton);
+        secondFrame.append(document.createElement("br"));
+    }
+
+    function deleteMeal(mealID)
+    {
+        const listItem = document.getElementById(mealID).remove();
         
+    }
+
+    function addFood(buttonID)
+    {
+        const foodCont = document.createElement("div");
+        const foodNameCont = document.createElement("div");
+        foodNameCont.className = "food-name";
+        foodNameCont.innerHTML = "Sample food";
+        const editButton = document.createElement("button");
+        editButton.className = "edit-btn";
+        editButton.innerHTML = "✎";
+        const foodDetails = document.createElement("div");
+        foodDetails.className = "food-details";
+        foodDetails.innerHTML = "1 Cup<br/>500 Calories";
+
+        document.getElementById(buttonID).before(foodCont);
+        foodCont.append(foodNameCont);
+        foodCont.append(editButton);
+        foodCont.append(foodDetails);
     }
