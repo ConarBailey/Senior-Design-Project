@@ -2,19 +2,332 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Calorie Counter</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calorie Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: #333;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .user-account {
+      color: #4a6cf7;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: 0.3s;
+    }
+
+    .user-account:hover {
+      background-color: #f0f4ff;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .deplogo {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 30px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2c3e50;
+      border-bottom: 2px solid #f0f4ff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-title i {
+      margin-right: 10px;
+      color: #4a6cf7;
+    }
+
+    .actions-list {
+      list-style: none;
+    }
+
+    .action-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .action-item:hover {
+      background-color: #f8faff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e6ecff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a6cf7;
+      margin-right: 15px;
+      font-size: 18px;
+    }
+
+    .action-text {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 500;
+      color: #444;
+    }
+
+    .action-arrow {
+      color: #bbb;
+      font-size: 18px;
+    }
+
+    .calculator {
+      background: linear-gradient(135deg, #f8faff 0%, #f0f5ff 100%);
+      border: 1px solid #e6ecff;
+      border-radius: 14px;
+      padding: 25px;
+    }
+
+    .calculator-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .calculator-title i {
+      margin-right: 10px;
+      color: #4a6cf7;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      font-size: 15px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      background-color: #fff;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4a6cf7;
+      box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+    }
+
+    .gender-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .gender-option {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      text-align: center;
+      background: #fff;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .gender-option:hover {
+      background-color: #f0f4ff;
+    }
+
+    .calculate-btn {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      border: none;
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.2s;
+    }
+
+    .calculate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(37, 117, 252, 0.3);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
 </head>
+
 <body>
   <header>
-    <img class="logo" src="img/logo.png" width="90" height="90">
-    <a href="#" class="user-account">Account Settings</a>
+    <div class="logo">Calorie<br>Tracker</div>
+    <a href="#" class="user-account"><i class="fas fa-user-cog"></i> Account Settings</a>
   </header>
 
   <main>
+    <div class="deplogo">Daily Calorie Planner</div>
 
-	<img class="deplogo" src="img/deplogo.png" height="100px">
+    <div class="content">
+      <!-- Left Panel: Actions -->
+      <div class="section">
+        <h2 class="section-title"><i class="fas fa-sliders-h"></i> Actions</h2>
+        <ul class="actions-list">
+          <li class="action-item">
+            <div class="action-icon"><i class="fas fa-bullseye"></i></div>
+            <div class="action-text">Set Calorie Target</div>
+            <div class="action-arrow"><i class="fas fa-chevron-right"></i></div>
+          </li>
+          <li class="action-item">
+            <div class="action-icon"><i class="fas fa-envelope"></i></div>
+            <div class="action-text">Change Email</div>
+            <div class="action-arrow"><i class="fas fa-chevron-right"></i></div>
+          </li>
+          <li class="action-item">
+            <div class="action-icon"><i class="fas fa-key"></i></div>
+            <div class="action-text">Reset Password</div>
+            <div class="action-arrow"><i class="fas fa-chevron-right"></i></div>
+          </li>
+          <li class="action-item">
+            <div class="action-icon"><i class="fas fa-trash-alt"></i></div>
+            <div class="action-text">Delete Data</div>
+            <div class="action-arrow"><i class="fas fa-chevron-right"></i></div>
+          </li>
+          <li class="action-item">
+            <div class="action-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="action-text">Sign Out</div>
+            <div class="action-arrow"><i class="fas fa-chevron-right"></i></div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right Panel: Calorie Calculator -->
+      <div class="section">
+        <h2 class="section-title"><i class="fas fa-calculator"></i> Required Calories Estimator</h2>
+        <div class="calculator">
+          <div class="calculator-title"><i class="fas fa-user"></i> Calculate Your Daily Calorie Needs</div>
+
+          <div class="input-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" placeholder="Enter your age">
+          </div>
+
+          <div class="input-group">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" placeholder="Enter your height">
+          </div>
+
+          <div class="input-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" placeholder="Enter your weight">
+          </div>
+
+          <div class="gender-group">
+            <div class="gender-option"><i class="fas fa-mars"></i> Male</div>
+            <div class="gender-option"><i class="fas fa-venus"></i> Female</div>
+          </div>
+
+          <button class="calculate-btn"><i class="fas fa-calculator"></i> Calculate</button>
+        </div>
+      </div>
+    </div>
   </main>
+
+  <footer>
+    <p>Calorie Tracker &copy; 2025 - Track Your Nutrition, Achieve Your Goals</p>
+  </footer>
 </body>
-<script src = "calorieCounter.js"></script>
 </html>
