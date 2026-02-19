@@ -152,7 +152,7 @@ header {
   display:none;
 }
 
-.meal-input-box {
+.input-box {
   position:relative;
   width:600px;
   height:4rem;
@@ -162,7 +162,7 @@ header {
   font-size:3rem;
 }
 
-.meal-input-button {
+.input-button {
   background-color: white;
   color: navy;
   border: none;
@@ -174,7 +174,7 @@ header {
   margin: 0 auto;
 }
 
-.meal-input-button:hover {
+.input-button:hover {
   background-color: grey;
 }
 
