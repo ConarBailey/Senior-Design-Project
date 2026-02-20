@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* background-color: #fff; */
+}
+
+html {
+  font-size: 16px;
+  margin: 0;
+  place-content: center;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  /* background-color: blue; */
+  /* background-color: #efefef; */
+  margin: 0;
+}
+
+#root {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
+
+.App {
+  width: 100vw;
+  /* max-width: 800px; */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  /* border: 1px solid #333; */
+  /* box-shadow: 0px 0px 15px gray; */
+}
+
+.Header{
+  width: 100%;
+  border: none;
+  margin: 0 0 0 0;
+  /* background-color: #a266f5; */
+  background-color: blue;
+  color:orange;
+  padding: 0 0 5px 0;
+  display: flex;
+  justify-content:space-between;
+  align-items:start;
+}
+
+.Footer {
+  width: 100%;
+  /* background-color: #a266f5; */
+  /* background-color: dodgerblue; */
+  color:orange;
+  /* padding: 1rem; */
+  display: flex;
+  justify-content:right;
+  align-items:center;
+}
+
+.Header h1 {
+  font-size: 3rem;
+}
+
+.Header svg {
+  font-size: 1rem;
+}
+
+.Footer {
+  padding: 0.75rem;
+  display: flex;
+  place-content: right;
+}
+
+.Nav {
+  width: 100%;
+  /* background-color: #333; */
+  background-color:orange;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: none;
+  margin: 0 0;
+}
+
+.searchForm {
+  width: 40%;
+  padding: 1rem 0 0 0.75rem;
+}
+
+.searchForm input[type="text"] {
+  font-family: 'Open Sans', sans-serif;
+  width: 50%;
+  min-height: 48px;
+  font-size: 1rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  outline: none;
+}
+
+.searchForm label {
+  position: absolute;
+  left: -99999px;
+}
+
+.Nav ul {
+  /* color: #fff; */
+  color: blue;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.Nav li {
+  padding: 1rem;
+}
+
+.Nav li:hover, 
+.Nav li:focus {
+  padding: 1rem;
+}
+
+.Nav li a {
+  /* color: #fff; */
+  color: blue;
+  text-decoration: none;
+}
+
+.Nav li:hover, 
+.Nav li:focus, 
+.Nav li:hover a, 
+.Nav li:focus a  {
+  /* background-color: #eee;
+  color: #333; */
+  background-color: orange;
+  color: blue;
+}
+
+.Nav li:hover a, 
+.Nav li:focus a {
+  cursor: pointer;
+}
+
+.Home, .NewPost, .PostPage, .About, .Admin, .FoodLog, .Log, .Missing {
+  width: 100%;
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: #fff;
+  color:black;
+}
+
+.Welcome {
+  width: 100%;
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: blue;
+  color:white;
+}
+
+.Login, .Register {
+  width: 100%;
+  flex-grow: 1;
+  font-size: 0.75rem;
+  /* margin: 0 auto; */
+  /* padding: 1rem; */
+  overflow-y:hidden;
+  background-color: #fff;
+  justify-content: center;
+  align-items:center;
+}
+
+.Login section, .Register section {
+    /* width: 100%; */
+    max-width: 420px;
+    min-height: 475px;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    font-size: 0.7rem;
+    padding: 0 20px 0 20px;
+    /* justify-content: flex-start; */
+    justify-content: center;
+    align-items: center;
+    /* padding: 1rem; */
+    /* background-color: rgba(0,0,0,0.4); */
+    background-color:blue;
+    color: white;
+}
+
+
+.post {
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid lightgray;
+}
+
+.Home .post a {
+  text-decoration: none;
+}
+
+.Home .post a, 
+.Home .post a:visited {
+  color: #000;
+}
+
+.post:first-child {
+  margin-top: 0;
+}
+
+.post:last-child {
+  border-bottom: none;
+}
+
+.postDate {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.postBody {
+  margin: 1rem 0;
+}
+
+.newPostForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.newPostForm label {
+  margin-top: 1rem;
+}
+
+.newPostForm input[type='text'], 
+.newPostForm textarea {
+  font-family: 'Open Sans', sans-serif;
+  width: 100%;
+  min-height: 48px;
+  font-size: 1rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  margin-right: 0.25rem;
+  outline: none;
+}
+
+.newPostForm textarea {
+  height: 100px;
+}
+
+.newPostForm button {
+  margin-top: 1rem;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 10px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.Missing h2, .PostPage h2, 
+.Missing p, .PostPage p {
+  margin-bottom: 1rem;
+}
+
+.Welcome h2 {
+  margin-top: 1rem;
+}
+
+.PostPage button {
+  height: 48px;
+  min-width: 48px;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: red;
+  color: #fff;
+  cursor: pointer;
+}
+
+.statusMsg {
+  margin-top: 2rem;
+}
+
+@media only screen and (min-width: 610px) {
+  html {
+    font-size: 22px;
+  }
+
+  .Header h1 {
+    font-size: 3rem;
+  }
+
+  .Nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .Nav ul {
+    text-align: right;
+  }
+
+  .Nav li:hover, 
+  .Nav li:focus, 
+  .Nav li:hover a, 
+  .Nav li:focus a  {
+    background-color: #eee;
+    color: #333;
+  }
+
+  .searchForm {
+    width: 50%;
+    padding: .5rem 0;
+  }
+ 
+  .searchForm input[type="text"] {
+    margin-left: 0.5rem;
+  }
+
+  .newPostForm textarea {
+    height: 300px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+
+  .Header svg {
+    font-size: 3rem;
+  }
+
+}
+
+.AppLogo {
+  width: 125px;
+  height: 75px;
+  /* padding:0 10px; */
+  margin:0;
+}
+
+.Pic1 {
+  width: 300px;
+  height: 300px;
+}
+.UTA {
+  width: 150px;
+  height: 75px;
+}
+
+.CopyRight {
+  padding:0 500px;
+}
+
+.line {
+  font-size: 0.5rem;
+  /* padding: 0 0 0 0; */
+}
