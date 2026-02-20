@@ -1,26 +1,24 @@
-
 var numberofMeals = 0;
 const socket = new WebSocket('ws://localhost:8080');
-const apiURL = 'https://platform.fatsecret.com/rest/server.api';
-const apiParams = new URLSearchParams();
-apiParams.append('method', 'foods.search');
-apiParams.append('search_expression', foodName);
-apiParams.append('format', 'json'); 
-var accessToken;
+socket.binaryType = "arraybuffer";
+
 
 socket.addEventListener('open', event =>{
-    if(accessToken == null){
-        socket.send('Access token request');
-    }
+    console.log("Socket connection open.")
 });
 
 socket.addEventListener('message', event => {
   console.log('Message from server: ', event.data);
+  if(event.data.slice(0,"SEARCH_RESULTS:".length)=="SEARCH_RESULTS:"){
+    searchResults = JSON.parse(event.data.slice("SEARCH_RESULTS:".length,event.data.length));
+    console.log(searchResults);
+  };
+  
 });
 
 function openMealAdd()
 {
-document.getElementById("addMeal").style.display="flex";
+    document.getElementById("addMeal").style.display="flex";
     document.getElementById("meal-input").style.display="block";
 }
 
@@ -80,47 +78,7 @@ function addFood(buttonID)
 
 async function foodSearch(accessToken){
     var foodName = document.getElementById("foodName").value;
-
-    try {
-        const response = await fetch(apiURL + '?' + apiParams.toString(), {
-            method: 'POST', // Method can also be POST
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log(data)
-        const total_results = data.foods.total_results;
-        console.log('Total results=',total_results);
-        if (total_results != '0') {
-            const formattedResults = data.foods.food.map(food => {
-                // The food_description usually looks like: "Per 100g - Calories: 52kcal | Fat: 0.17g..."
-                const description = food.food_description;
-                
-                // Extract calories using regex (find digits before "kcal")
-                const calorieMatch = description.match(/Calories: (\d+)kcal/);
-                const calories = calorieMatch ? calorieMatch[1] : 'N/A';
-
-                return {
-                food_id: food.food_id,
-                food_name: food.food_name,
-                calories: calories // Extracted from description
-                };
-            });
-            console.log(formattedResults)
-        }
-        else {
-            console.log('Error: '+foodName+' not found.')
-        }
-
-    } catch (error) {
-        console.error('Error calling FatSecret API:', error);
-    }
+    socket.send("Food_name="+foodName);
 }
 
 
