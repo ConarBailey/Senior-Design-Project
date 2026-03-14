@@ -1,0 +1,26 @@
+.log{
+    width:100%;
+}
+
+.meal {
+    background-color: blue;
+    margin: 10px;
+    padding: 10px;
+    width: 70%;
+}
+
+#hideResults {
+    display:none;
+}
+
+.searchResult{
+    background-color:transparent;
+    color:white;
+    border-style:none;
+    margin: 5px;
+    padding: 5px;
+}
+
+.searchResult:hover {
+    text-decoration: underline;
+}
