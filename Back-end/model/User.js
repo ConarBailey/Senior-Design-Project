@@ -6,32 +6,47 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true,
-    },    
-    email: {
-        type: String,
-        required: true,
-    },    
-    creationDate: {
-        type: Date,
-        default: Date.now
-    },    
-    calorieGoal: {
-        type: String,
-    },        
-    role: {
+    roles: {
         User: {
             type: Number,
             default: 2001
         },
+        Editor: Number,
         Admin: Number
     },
-    modComments: {
+    password: {
         type: String,
+        required: true
     },
     refreshToken: String
-})
+});
 
-module.exports = mongoose.model('User',userSchema);
+module.exports = mongoose.model('User', userSchema);
+
+
+    // creationDate: {
+    //     type: Date,
+    //     default: Date.now
+    // },    
+    // calorieGoal: {
+    //     type: String,
+    // },        
+    // logDate: {
+    //     type: Date
+    // },
+    // mealName: {
+    //     type: String
+    // },
+    // foodName: {
+    //     type: String
+    // },
+    // quantityValue: {
+    //     type: Number
+    // },
+    // quantityUnits: {
+    //     type: Number
+    // },
+    // calories: {
+    //     type: Number
+    // },
+
