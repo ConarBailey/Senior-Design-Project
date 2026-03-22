@@ -1,8 +1,7 @@
 const apiURL = 'https://platform.fatsecret.com/rest/server.api';
 
 const getToken = require("./getAccessToken")
-const foodid = process.argv[2] ? process.argv[2] : '70829266';
-async function callFatSecretApi(accessToken) {
+async function callFatSecretAPI(accessToken,foodid) {
     const apiParams = new URLSearchParams();
     apiParams.append('method', 'food.get.v5');
     apiParams.append('food_id', foodid); 
@@ -21,8 +20,7 @@ async function callFatSecretApi(accessToken) {
         }
 
         const data = await response.json();
-        console.log(data.food);
-        console.log(data.food.servings.serving[0]);
+        return data;
 
     } catch (error) {
         console.error('Error calling FatSecret API:', error);
@@ -33,6 +31,10 @@ async function callFatSecretApi(accessToken) {
     const token = await getToken.getAccessToken();
     // console.log(token)
     if (token) {
-        await callFatSecretApi(token);
+        await callFatSecretAPI(token);
     }
 })();
+
+module.exports = {
+    callFatSecretAPI
+}
