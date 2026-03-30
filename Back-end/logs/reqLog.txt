@@ -23,3 +23,4 @@
 20260219	13:22:55	66260a87-00e4-4629-88dc-b83aeecad27a	GET	null	/getAccessToken
 20260219	13:27:56	ea40d4c8-4edb-47af-86e6-b20ea52cb395	GET	null	/getAccessToken
 20260222	14:57:49	e29a2d46-bd77-4e9c-a21f-11a0aeef7515	OPTIONS	http://localhost:3000	/register
+20260319	16:57:27	81317095-368b-4444-b7fe-6c1ca6f8072f	OPTIONS	http://localhost:3000	/auth

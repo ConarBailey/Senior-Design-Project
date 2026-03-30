@@ -13,6 +13,7 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
 const getToken = require("./getAccessToken")
 const foodSearch = require("./callFatSecretAPI")
+const foodID = require("./getFoodId")
 var accessToken;
 const WebSocket = require('ws');
 const PORT = process.env.PORT || 3500;
@@ -35,6 +36,10 @@ socketServer.on('connection', (ws) => {
     if(event.data.slice(0,10)=='Food_name='){
         foodSearch.callFatSecretAPI(accessToken,event.data.slice(10,event.data.length)).then((value)=>{
             ws.send("SEARCH_RESULTS:"+JSON.stringify(value));
+        });
+    } else if(event.data.slice(0,8)=='Food_id='){
+        foodID.callFatSecretAPI(accessToken,event.data.slice(8,event.data.length)).then((value)=>{
+            ws.send("SELECTION:"+JSON.stringify(value));
         });
     }
     });

@@ -7,9 +7,14 @@
     margin: 10px;
     padding: 10px;
     width: 70%;
+    color: white;
 }
 
 #hideResults {
+    display:none;
+}
+
+#hideSelection {
     display:none;
 }
 
