@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from 'react-router-dom';
+
+import { Link, useNavigate} from 'react-router-dom';
 import axios from './api/axios';
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -31,6 +32,11 @@ const Register = () => {
     const [matchFocus, setMatchFocus] = useState(false);
 
     const [errMsg, setErrMsg] = useState('');
+    const [inputType, setInputType] = useState('password');
+
+    const toggleVisibility = () => {
+        setInputType((prevType) => (prevType === 'password' ? 'text' : 'password'));
+    };
 
     useEffect(() => {
         userRef.current.focus();
@@ -166,13 +172,16 @@ const Register = () => {
                     Must include the @ character.<br />
                     Must include a domain name.
                 </p>
-                <label htmlFor="password">
+                <label className='password' htmlFor='password'>
                     Password:
                     <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
                     <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
+                    <span onClick={toggleVisibility} style={{ cursor: 'pointer', marginLeft: '400px' }}>
+                        {inputType === 'password' ? '👁️ Show' : '🙈 Hide'}
+                    </span>                
                 </label>
-                <input
-                    type="password"
+               <input
+                    type={inputType}
                     id="password"
                     onChange={(e) => setPwd(e.target.value)}
                     value={pwd}
@@ -194,7 +203,7 @@ const Register = () => {
                     <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
                 </label>
                 <input
-                    type="password"
+                    type={inputType}
                     id="confirm_pwd"
                     onChange={(e) => setMatchPwd(e.target.value)}
                     value={matchPwd}
@@ -213,7 +222,7 @@ const Register = () => {
             <p>
                 Already registered?<br />
                 <span className="line">
-                    <a href="login">Sign In</a>
+                    <Link to="/login">Sign In</Link>
                 </span>
             </p>
         </main>

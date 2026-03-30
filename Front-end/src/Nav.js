@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import useAuth from "./hooks/useAuth";
 
 const Nav = ({ search, setSearch }) => {
-    const { user } = useAuth();
+    const { auth } = useAuth();
     return (
         <nav className="Nav">
-            <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
+            {/* <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="search">Search</label>
                 <input
                     id="search"
@@ -15,17 +15,13 @@ const Nav = ({ search, setSearch }) => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-            </form>
+            </form> */}
             <ul>
-                <li><Link to="login">Sign In</Link></li>
-                <li><Link to="logout">Sign Out</Link></li>
-                <li><Link to="foodLog">Food Log</Link></li>
-                {user && (
-                        // Only show this link if the user is an admin
-                         <li><Link to="foodLog">Food Log</Link></li>
-               )}
+                {!auth?.user && (<li><Link to="login">Sign-In</Link></li>)}
+                {auth?.user && (<li><Link to="logout">Sign-Out</Link></li>)}
+                {auth?.user && (<li><Link to="foodLog">Food Log</Link></li>)}
+                {auth?.user && auth.roles.includes(5150) && (<li><Link to="admin">Admin</Link></li>)}
                 {/* <li><Link to="log">Log</Link></li> */}
-                {/* <li><Link to="admin">Admin</Link></li> */}
                 <li><Link to="about">About</Link></li>
             </ul>
         </nav>

@@ -118,11 +118,13 @@ body {
   height: 60px;
   /* padding:0 10px; */
   margin:0;
+  border-radius: 5px;
 }
 
 .UTA {
   width: 130px;
   height: 60px;
+  border-radius: 5px;
 }
 
 .Header svg {
@@ -151,9 +153,9 @@ body {
   /* background-color: #333; */
   background-color:orange;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
   border: none;
   margin: 0 0;
 }
@@ -188,12 +190,14 @@ body {
 }
 
 .Nav li {
-  padding: 1rem;
+  padding: 0.4rem;
+  border-radius: 10px;
+  margin:0.2rem;
 }
 
 .Nav li:hover, 
 .Nav li:focus {
-  padding: 1rem;
+  padding: 0.4rem;
 }
 
 .Nav li a {
@@ -217,11 +221,22 @@ body {
   cursor: pointer;
 }
 
-.Home, .NewPost, .PostPage, .About, .Admin, .FoodLog, .Log, .Missing {
+.Unauthorized, .Form, .meal, .log, .Home, .NewPost, .PostPage, .About, .Admin, .FoodLog, .Missing {
   width: 100%;
   flex-grow: 1;
-  padding: 1rem;
+  /* padding: 1rem; */
   overflow-y: auto;
+  background-color: #fff;
+  color:black;
+}
+
+.Log {
+  width: 100%;
+  flex-grow: 1;
+  /* padding: 1rem; */
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
   background-color: #fff;
   color:black;
 }
@@ -231,7 +246,7 @@ body {
   flex-grow: 1;
   padding: 1rem;
   overflow-y: auto;
-  background-color: blue;
+  background-color: dodgerblue;
   color:white;
 }
 
@@ -339,12 +354,12 @@ body {
     font-size: 3rem;
   } */
 
-  .Nav {
+  /* .Nav {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-  }
+  } */
 
   .Nav ul {
     text-align: right;
@@ -383,6 +398,7 @@ body {
 .Pic1 {
   width: 200px;
   height: 200px;
+  border-radius: 10px;
 }
 .CopyRight {
   padding:0 500px;
@@ -403,11 +419,12 @@ body {
 
 .flexGrow {
     /* background-color: blue; */
-    color: orange;
+    color:rgb(112, 79, 154);
     flex-grow: 1;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
 }
 
 .hide {
@@ -441,7 +458,43 @@ label {
 button {
   margin-top: 1rem;
   margin-bottom: 1.25rem;
+  margin-left: 1rem;
   padding: 0.3rem;
+  background-color: aliceblue;
+  color:darkblue
+}
+
+.Login button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0;
+  padding: 0.3rem;
+  background-color: aliceblue;
+  color:darkblue
+}
+
+.Register button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0;
+  padding: 0.3rem;
+  background-color: aliceblue;
+  color:darkblue
+}
+
+.flexGrow button{
+  padding: .5rem;
+  margin-top: 1rem;
+  margin-left: 0;
+  margin-bottom: 0;
+  border-width: 3px;
+}
+
+.flexGrow h2{
+  padding: .5rem;
+  margin-top: 1rem;
+  margin-left: 0;
+  margin-bottom: 0;
 }
 
 .instructions {
@@ -463,3 +516,33 @@ button {
     left: -9999px;
 }
 
+.form-header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0.5rem;
+}
+
+.button {
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+
+.button:focus {
+  outline: 2px solid gold;
+}
+
+.remove-button {
+  display: none;
+}
+
+ul {
+  list-style-type: none;
+  /* margin-bottom: 1rem; */
+}

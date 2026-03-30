@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Login from './Login';
+// import { useNavigate } from 'react-router-dom';
 
 function WelcomePage() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // useEffect(() => {
   //   const timer = setTimeout(() => {
@@ -24,7 +23,7 @@ function WelcomePage() {
         <h1>Welcome to Calorie Counter</h1><br/>
         {/* <img className='Pic1' src='../iced-coffee.png'/> */}
         <img className='Pic1' src='../logo.png'/>
-        <br/><a href="login"><h2>Please Sign-in</h2></a><br/>
+        <br/><br/><a href="register"><h3>Sign-Up</h3></a><br/>
         </center>
     </main>
   );

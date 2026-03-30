@@ -1,14 +1,23 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import AuthContext from "./context/AuthProvider";
-import { useNavigate } from 'react-router-dom';
+import useAuth from './hooks/useAuth';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+
 import axios from './api/axios';
 const LOGIN_URL = '/auth';
 
 const Login = () => {
     const { setAuth } = useContext(AuthContext);
+    const navigate = useNavigate(); // Initialize the navigate function
+    const location =useLocation();
+    // const from = location.state?.from?.pathname || "/";
+    const [inputType, setInputType] = useState('password');
+
+    const toggleVisibility = () => {
+        setInputType((prevType) => (prevType === 'password' ? 'text' : 'password'));
+    };
     const userRef = useRef();
     const errRef = useRef();
-    const navigate = useNavigate(); // Initialize the navigate function
 
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
@@ -70,9 +79,14 @@ const Login = () => {
                         value={user}
                         required
                     />
-                    <label htmlFor="password">Password:</label>
+                    <label className='password' htmlFor='password'>
+                        Password:
+                        <span onClick={toggleVisibility} style={{ cursor: 'pointer', marginLeft: '150px' }}>
+                            {inputType === 'password' ? '👁️ Show' : '🙈 Hide'}
+                        </span>                
+                    </label>
                     <input
-                        type="password"
+                        type= {inputType}
                         id="password"
                         onChange={(e) => setPwd(e.target.value)}
                         value={pwd}
@@ -83,7 +97,7 @@ const Login = () => {
                 <p>
                     Need an Account?<br />
                     <span className="line">
-                        <a href="register">Sign Up</a>                                  
+                        <Link to="/register">Sign Up</Link>                                  
                     </span>
                 </p>
             </main>
