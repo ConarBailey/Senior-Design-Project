@@ -9,7 +9,7 @@ const LOGIN_URL = '/auth';
 const Login = () => {
     const { setAuth } = useContext(AuthContext);
     const navigate = useNavigate(); // Initialize the navigate function
-    const location =useLocation();
+    // const location =useLocation();
     // const from = location.state?.from?.pathname || "/";
     const [inputType, setInputType] = useState('password');
 
@@ -46,7 +46,7 @@ const Login = () => {
             //console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
-            setAuth({ user, pwd, roles, accessToken });
+            setAuth({ user, roles, accessToken });
             setUser('');
             setPwd('');
             navigate('/Foodlog');

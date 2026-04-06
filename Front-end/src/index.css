@@ -111,20 +111,21 @@ body {
 
 .Header h1 {
   font-size: 2.5rem;
+  margin-left: 130px;
 }
 
 .AppLogo {
-  width: 80px;
+  width: 100px;
   height: 60px;
   /* padding:0 10px; */
   margin:0;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .UTA {
-  width: 130px;
+  width: 250px;
   height: 60px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .Header svg {
@@ -221,13 +222,63 @@ body {
   cursor: pointer;
 }
 
-.Unauthorized, .Form, .meal, .log, .Home, .NewPost, .PostPage, .About, .Admin, .FoodLog, .Missing {
+.Unauthorized, .Form, .meal, .log, .Home, .NewPost, .PostPage, .About, .FoodLog, .Missing {
   width: 100%;
+  /* display: flex; */
   flex-grow: 1;
   /* padding: 1rem; */
   overflow-y: auto;
   background-color: #fff;
   color:black;
+}
+
+.Admin {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding:0;
+  margin-top: 0;
+  overflow-y: auto;
+  align-items: center;
+  /* justify-content: center; */
+  background-color: #fff;
+  color:black;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 30px;
+}
+
+.users {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  /* flex-grow: 1; */
+  /* padding: 1rem; */
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #fff; */
+  color:black;
+}
+
+.tools {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  /* flex-grow: 1; */
+  /* padding: 1rem; */
+  overflow-y: auto;
+  align-items:center;
+  justify-content:space-between;
+  /* background-color: #fff; */
+  color:black;
+}
+
+.tools button{
+    margin-right: 10rem;
 }
 
 .Log {

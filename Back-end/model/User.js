@@ -6,6 +6,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true,
+    },  
     roles: {
         User: {
             type: Number,
@@ -22,31 +26,4 @@ const userSchema = new Schema({
 });
 
 module.exports = mongoose.model('User', userSchema);
-
-
-    // creationDate: {
-    //     type: Date,
-    //     default: Date.now
-    // },    
-    // calorieGoal: {
-    //     type: String,
-    // },        
-    // logDate: {
-    //     type: Date
-    // },
-    // mealName: {
-    //     type: String
-    // },
-    // foodName: {
-    //     type: String
-    // },
-    // quantityValue: {
-    //     type: Number
-    // },
-    // quantityUnits: {
-    //     type: Number
-    // },
-    // calories: {
-    //     type: Number
-    // },
 
