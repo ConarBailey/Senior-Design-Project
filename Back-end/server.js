@@ -11,44 +11,7 @@ const cookieParser = require('cookie-parser');
 const credentials = require('./middleware/credentials');
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
-const getToken = require("./getAccessToken")
-const foodSearch = require("./callFatSecretAPI")
-const foodID = require("./getFoodId")
-var accessToken;
-const WebSocket = require('ws');
 const PORT = process.env.PORT || 3500;
-const socketServer = new WebSocket.Server({port:8080});
-socketServer.binaryType = "arraybuffer";
-
-
-console.log('WebSocket server is running on ws://localhost:8080');
-
-// Connection event handler
-socketServer.on('connection', (ws) => {
-  console.log('New client connected');
-  
-  // Send a welcome message to the client
-  ws.send('Welcome to the WebSocket server!');
-
-  // Message event handler
-    ws.addEventListener('message', event => {
-    console.log('Message to server: ', event.data);
-    if(event.data.slice(0,10)=='Food_name='){
-        foodSearch.callFatSecretAPI(accessToken,event.data.slice(10,event.data.length)).then((value)=>{
-            ws.send("SEARCH_RESULTS:"+JSON.stringify(value));
-        });
-    } else if(event.data.slice(0,8)=='Food_id='){
-        foodID.callFatSecretAPI(accessToken,event.data.slice(8,event.data.length)).then((value)=>{
-            ws.send("SELECTION:"+JSON.stringify(value));
-        });
-    }
-    });
-
-  // Close event handler
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
-});
 
 // Connect to MongoDB
 connectDB();
@@ -81,9 +44,13 @@ app.use('/register', require('./routes/register'));
 app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
-app.use('/foodlog', require('./routes/foodlog'));
+app.use('/fatSecret', require('./routes/api/fatSecret'));
+
 
 app.use(verifyJWT);
+app.use('/foodlog', require('./routes/foodlog'));
+app.use('/employees', require('./routes/api/employees'));
+app.use('/users', require('./routes/api/users'));
 
 app.use('/', (req, res) => {
     res.status(404);
@@ -102,7 +69,3 @@ mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB')
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
-
-(async () => {
-     accessToken = await getToken.getAccessToken();
-})();
