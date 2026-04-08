@@ -246,6 +246,91 @@ body {
   color:black;
 }
 
+.FoodName {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* padding:0;
+  margin-top: 0; */
+  overflow-y: auto;
+  align-items: flex-start;
+  /* justify-content: center; */
+  background-color: #fff;
+  color:black;
+}
+
+.FoodId {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* padding:0;
+  margin-top: 0; */
+  overflow-y: auto;
+  align-items: flex-start;
+  /* justify-content: center; */
+  background-color: #fff;
+  color:black;
+}
+
+.FoodId button {
+  margin:0;
+}
+.FoodName button {
+  margin:0;
+}
+
+.foodResults {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* padding:0;
+  margin-top: 0; */
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.foodResults text {
+  width: 200px;
+  margin-left: 1rem;
+}
+
+.split-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-left: 200px;
+  gap: 20px;
+}
+
+.split-container-FoodID {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-grow: row nowrap;
+  margin: 0.5rem;
+}
+
+.split-container-FoodName {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-grow: row nowrap;
+  margin: 0.5rem;
+}
+
+#food_ID {
+  width: 150px;
+}
+
+#food_Name {
+  width: 150px;
+}
+
 table {
   border-collapse: separate;
   border-spacing: 30px;

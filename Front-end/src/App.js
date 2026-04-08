@@ -11,6 +11,8 @@ import FoodLog from './FoodLog';
 import Missing from './Missing';
 import Unauthorized from './Unauthorized';
 import RequireAuth from './RequireAuth';
+import FoodId from './FoodId';
+import FoodName from './FoodName';
 import {Route,Routes,useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import {format} from 'date-fns';
@@ -45,6 +47,8 @@ return (
           {/* <Route path="/" element={<Welcome />} /> */}
           <Route path="foodLog" element={<FoodLog/>}/>
           <Route path="logout" element={<Logout/>}/>
+          <Route path="foodName" element={<FoodName/>}/>
+          <Route path="foodID" element={<FoodId/>}/>
         </Route>
 
         <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>

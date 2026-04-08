@@ -1,8 +1,8 @@
 const Userfoodlog = require('../model/Userfoodlog');
 
 const handleNewFoodLog = async (req, res) => {
-    const { username, foodName, quantityValue, quantityUnits, calories} = req.body;
-    if (!username || !foodName || !quantityValue || !quantityUnits || !calories) return res.status(400).json({ 'message': 'Username, foodName, quantityValue and quantityUnits, and calories are required.' });
+    const { username, meals} = req.body;
+    if (!username || !meals) return res.status(400).json({ 'message': 'Username and meals are required.' });
  
     try {
 
@@ -10,12 +10,7 @@ const handleNewFoodLog = async (req, res) => {
         const result = await Userfoodlog.create({
             "username": username,
             "calorieGoal": req.body.calorieGoal,
-            "mealName": req.body.mealName,
-            "logDate": req.body.logDate,
-            "foodName": req.body.foodName,
-            "quantityUnits": req.body.quantityUnits,
-            "quantityValue": req.body.quantityValue,
-            "calories": req.body.calories
+            "meals": meals,
     });
         console.log(result);
         res.status(201).json({ 'success': `New entry for ${username} food log created!` });
@@ -58,12 +53,8 @@ const updateFoodLog = async (req,res) => {
     const userLog = await Userfoodlog.findOne({username:req.body.username}).exec();
     if (!userLog) return res.status(204).json({'message': `username ${req.body.username} not found.`});
     if (req.body?.calorieGoal) userLog.calorieGoal = req.body.calorieGoal;
-    if (req.body?.mealName) userLog.mealName = req.body.mealName;
-    if (req.body?.logDate) userLog.logDate = req.body.logDate;
-    if (req.body?.foodName) userLog.foodName = req.body.foodName;
-    if (req.body?.quantityUnits) userLog.quantityUnits = req.body.quantityUnits;
-    if (req.body?.quantityValue) userLog.quantityValue = req.body.quantityValue;
-    if (req.body?.calories) userLog.calories = req.body.calories;
+    if (req.body?.meals) userLog.meals = req.body.meals;
+    if (req.body?.foodIDs) userLog.foodIDs = req.body.foodIDs;
     const result = await userLog.save();
     res.json('updated '+result);
     console.log('updated result', result)

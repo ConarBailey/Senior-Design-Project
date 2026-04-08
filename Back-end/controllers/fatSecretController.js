@@ -1,8 +1,11 @@
-const apiURL = 'https://platform.fatsecret.com/rest/server.api';
-const { json } = require("express");
 const getToken = require("./getAccessToken")
+const getFoodName = require("./getFoodName")
+const apiURL = 'https://platform.fatsecret.com/rest/server.api';
+// const { json } = require("express");
 
-async function callFatSecretApi(accessToken,foodId) {
+
+
+async function getFoodId(accessToken,foodId) {
     const apiParams = new URLSearchParams();
     apiParams.append('method', 'food.get.v5');
     apiParams.append('food_id', foodId); 
@@ -29,15 +32,24 @@ async function callFatSecretApi(accessToken,foodId) {
 }
 
 const handleCallFatSecretAPI = async (req, res) => {
-    const {foodId} = req.body;
-    if (!foodId) return res.status(400).json({'message' : 'foodId is required'});
+    const {foodId, foodName} = req.body;
+    if (!foodId && !foodName) return res.status(400).json({'message' : 'Either foodId or foodName is required'});
     try {
         const token = await getToken.getAccessToken();
         if (token) {
-            const data = await callFatSecretApi(token,foodId);
-            if (data) {
-                res.json(data);
-                console.log(JSON.stringify(data))
+            if (foodId) {
+                const data = await getFoodId(token,foodId);
+                if (data) {
+                    res.json(data);
+                    // console.log(JSON.stringify(data))
+                }
+            }
+            else if (foodName) {
+                const data = await getFoodName.getFoodName(token,foodName);
+                if (data) {
+                    res.json(data);
+                    // console.log(JSON.stringify(data))
+                }               
             }
             else {
                 res.status(502).json({'error' : 'Failed to get data from FatSecret.'});
