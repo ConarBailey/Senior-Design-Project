@@ -1,12 +1,11 @@
 import React from 'react'
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './FoodLog.css';
-const socket = new WebSocket('ws://localhost:8080');
-socket.binaryType = "arraybuffer";
+import axios from './api/axios';
+import useAuth from './hooks/useAuth';
+const FOOD_ID_URL = './fatSecret';
 
-socket.addEventListener('open', event =>{
-    console.log("Socket connection open.")
-});
+
 
 function Food(props) {
   function handleDelete(){
@@ -49,39 +48,39 @@ function Meal(props) {
   const [selectedFood, setSelectedFood] = useState({food_name:'',servings:{serving:[{calories:0,protein:0,carbohydrate:0,fat:0}]}});
   const [quantityType, setQuantityType] = useState(0);
   const [quantityValue, setQuantityValue] = useState(1);
+  const [errMsg, setErrMsg] = useState('Please enter a food name to get the basic nutrition');
   let searchReturnFlag = false;
-
-  //Meal specific WebSocket listener. Must stay in component.
-  socket.addEventListener('message', event => {
-    //console.log(event.data)
-    if(searchReturnFlag){
-      if(event.data.slice(0,"SEARCH_RESULTS:".length)==="SEARCH_RESULTS:"){
-        searchReturnFlag = false;
-        try{
-          var searchResults = JSON.parse(event.data.slice("SEARCH_RESULTS:".length,event.data.length));
-          searchResults=searchResults.foods.food;
-          setFoodResults(searchResults);
-        }
-        catch (error) {console.log(error);setFoodResults([])}
-      } else if(event.data.slice(0,"SELECTION:".length)==="SELECTION:") {
-        searchReturnFlag = false;
-        var selectedFoodData = JSON.parse(event.data.slice("SELECTION:".length,event.data.length));
-        //console.log(selectedFoodData);
-        setSelectedFood(selectedFoodData.food);
-      };
-    }
-  });
 
   //Propagates meal deletion upto parent component.
   function handleDelete(){
     props.delete(props.id);
   }
 
-  function selectResult(food_id) {
-    searchReturnFlag=true;
-    socket.send("Food_id="+food_id);
-    setHideResults("hideResults")
-    setHideSelection("showSelection")
+  async function selectResult(foodId) {
+    try {
+                const response = await axios.post(FOOD_ID_URL,
+                    JSON.stringify({foodId}),
+                    {
+                        headers: {'Content-Type': 'application/json'},
+                        withCredentials: true
+                    }
+                );
+                const result = response?.data
+                console.log(result);
+                setSelectedFood(result.food);
+                setHideResults("hideResults")
+                setHideSelection("showSelection")
+            } catch (err) {
+                if(!err?.response) {
+                    setErrMsg('No Server Response');
+                } else if (err.response?.status === 400) {
+                    setErrMsg('Missing foodId');
+                } else if (err.response?.status === 401) {
+                    setErrMsg('Unauthorized');
+                } else {
+                    setErrMsg('Login Failed');
+                }
+            }
   }
   
   
@@ -125,12 +124,32 @@ function Meal(props) {
     props.editFood(props.id,foods);
   }
 
-  //Sends search signal through WebSocket
-  function search(term) {
-    setHideResults("showResults");
-    setSearchInput(term);
-    socket.send("Food_name="+term);
-    searchReturnFlag = true;
+  async function search(foodName) {
+  
+          try {
+              const response = await axios.post(FOOD_ID_URL,
+                  JSON.stringify({foodName}),
+                  {
+                      headers: {'Content-Type': 'application/json'},
+                      withCredentials: true
+                  }
+              );
+              const result = response?.data
+              console.log(result);
+              setFoodResults(result.foods.food);
+          } catch (err) {
+              if(!err?.response) {
+                  setErrMsg('No Server Response');
+              } else if (err.response?.status === 400) {
+                  setErrMsg('Missing foodId');
+              } else if (err.response?.status === 401) {
+                  setErrMsg('Unauthorized');
+              } else {
+                  setErrMsg('Login Failed');
+              }
+          }
+          setHideResults("showResults");
+          setSearchInput(foodName);   
   }
 
   //The meal component displays search results and saved foods in the form of unordered lists
@@ -184,10 +203,13 @@ const FoodLog = () => {
   const [meals, setMeals] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   console.log(meals);
+  const {auth} = useAuth();
+  const username = auth?.user
   let currentDate = new Date();
   var mealname = '';
   var logNutrition = {calories:0,protein:0,carbs:0,fats:0};
   var exportData = {logDate:selectedDate,meals:[]};
+  
 
   if(meals.length>0){
     for(let i = 0; i<meals.length;i++){
@@ -204,7 +226,7 @@ const FoodLog = () => {
       logNutrition.carbs += meals[i].nutrients.carbs;
       logNutrition.fats += meals[i].nutrients.fats;
   }}
-  console.log(exportData);
+
   //addMeal and deleteMeal use standard array functions to add to or remove from a single meal to the meals state array.
   function addMeal() {
     if(meals.some(meal => meal.name === mealname)) {
