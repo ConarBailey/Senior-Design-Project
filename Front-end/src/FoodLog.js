@@ -13,9 +13,9 @@ function Food(props) {
   }
 
   return(
-    <li>
-      <p>{props.name} - {props.quantity}</p>
-      <button onClick={handleDelete}>Delete</button>
+    <li className='food'>
+      <button onClick={handleDelete}>X</button>
+      {props.name} - {props.quantity}
     </li>
   )
 }
@@ -44,12 +44,12 @@ function Meal(props) {
   const [foodResults, setFoodResults] = useState([]);
   const [hideResults, setHideResults] = useState("showResults");
   const [hideSelection, setHideSelection] = useState("hideSelection");
-  const [searchInput, setSearchInput] = useState("");
   const [selectedFood, setSelectedFood] = useState({food_name:'',servings:{serving:[{calories:0,protein:0,carbohydrate:0,fat:0}]}});
   const [quantityType, setQuantityType] = useState(0);
   const [quantityValue, setQuantityValue] = useState(1);
   const [errMsg, setErrMsg] = useState('Please enter a food name to get the basic nutrition');
   let searchReturnFlag = false;
+  console.log(selectedFood);
 
   //Propagates meal deletion upto parent component.
   function handleDelete(){
@@ -81,6 +81,7 @@ function Meal(props) {
                     setErrMsg('Login Failed');
                 }
             }
+    document.getElementById('searchInput').value = '';
   }
   
   
@@ -90,9 +91,11 @@ function Meal(props) {
           id:foods[foods.length-1].id+1,
           food_id:selectedFood.food_id, 
           food_name:selectedFood.food_name, 
+          serving_id:selectedFood.servings.serving[quantityType].serving_id,
           quantityIndex:quantityType, 
           quantityValue:quantityValue, 
-          quantityName:selectedFood.servings.serving[quantityType].measurement_description, 
+          quantityName:selectedFood.servings.serving[quantityType].measurement_description,
+          quantity:quantityValue *  selectedFood.servings.serving[quantityType].number_of_units + " " + selectedFood.servings.serving[quantityType].measurement_description,
           calories: selectedFood.servings.serving[quantityType].calories*quantityValue,
           protein: selectedFood.servings.serving[quantityType].protein*quantityValue,
           carbs: selectedFood.servings.serving[quantityType].carbohydrate*quantityValue,
@@ -103,9 +106,11 @@ function Meal(props) {
           id:0,
           food_id:selectedFood.food_id, 
           food_name:selectedFood.food_name, 
+          serving_id:selectedFood.servings.serving[quantityType].serving_id,
           quantityIndex:quantityType, 
           quantityValue:quantityValue, 
-          quantityName:selectedFood.servings.serving[quantityType].measurement_description, 
+          quantityName:selectedFood.servings.serving[quantityType].measurement_description,
+          quantity:quantityValue *  selectedFood.servings.serving[quantityType].number_of_units + " " + selectedFood.servings.serving[quantityType].measurement_description, 
           calories: selectedFood.servings.serving[quantityType].calories*quantityValue,
           protein: selectedFood.servings.serving[quantityType].protein*quantityValue,
           carbs: selectedFood.servings.serving[quantityType].carbohydrate*quantityValue,
@@ -117,6 +122,7 @@ function Meal(props) {
     setQuantityValue(1);
     setHideSelection("hideSelection")
     props.editFood(props.id,foods);
+    document.getElementById('quantitySelect').value = '';
   }
 
   function deleteFood(id){
@@ -149,36 +155,37 @@ function Meal(props) {
               }
           }
           setHideResults("showResults");
-          setSearchInput(foodName);   
   }
 
   //The meal component displays search results and saved foods in the form of unordered lists
   //These lists are created by iterating through the meal component state arrays.
   return (
     <div className='meal'>
-      <h1>{props.name}</h1>
-      <h2>Calories:{props.nutrients.calories}</h2>
-      <h2>Protein:{props.nutrients.protein}</h2>
-      <h2>Carbohydrates:{props.nutrients.carbs}</h2>
-      <h2>Fats:{props.nutrients.fats}</h2>
-      <button onClick={handleDelete}>Delete meal</button>
+      <div className='mealHeader'>
+        <div className='mealName'><b>{props.name}</b></div>&nbsp;
+        Calories: {props.nutrients.calories}&nbsp;
+        Protein: {props.nutrients.protein}&nbsp;
+        Carbohydrates: {props.nutrients.carbs}&nbsp;
+        Fats: {props.nutrients.fats}
+        <button className='deleteMeal' onClick={handleDelete}>Delete meal</button>
+      </div>
       <ul>
         {foods.map(
           (food) => {
             //console.log(food);
-            return(<Food key={food.id} index={food.id} name={food.food_name} quantity={food.quantityValue + " " + food.quantityName} delete={deleteFood} />);
+            return(<Food key={food.id} index={food.id} name={food.food_name} quantity={food.quantity} delete={deleteFood} />);
           }
         )}
       </ul>
-      <input value={searchInput} onChange={e => search(e.target.value)}></input>
+      <input id='searchInput' placeholder='Search term' onChange={e => search(e.target.value)}></input>
       <div id={hideSelection}>
         <h1>{selectedFood.food_name}</h1>
         <select name="quantity" id="quantity" onChange={e => setQuantityType(e.target.value)}>
           {selectedFood.servings.serving.map( (serving,index) =>
             <option value={index}>{serving.serving_description}</option>
           )}
-        </select>
-        <input value={quantityValue} onChange={e => setQuantityValue(e.target.value)}></input>
+        </select>&nbsp;
+        <input id='quantitySelect' placeholder='Amount of servings' value={quantityValue} onChange={e => setQuantityValue(e.target.value)}></input>
         <button onClick={addFood}>Add food</button>
         <p>Calories: {selectedFood.servings.serving[quantityType].calories*quantityValue}</p>
         <p>Protein: {selectedFood.servings.serving[quantityType].protein*quantityValue}</p>
@@ -205,20 +212,19 @@ const FoodLog = () => {
   console.log(meals);
   const {auth} = useAuth();
   const username = auth?.user
-  let currentDate = new Date();
   var mealname = '';
   var logNutrition = {calories:0,protein:0,carbs:0,fats:0};
-  var exportData = {logDate:selectedDate,meals:[]};
+  var exportData = {username:username,logDate:selectedDate,meals:[]};
   
 
   if(meals.length>0){
     for(let i = 0; i<meals.length;i++){
-      exportData.meals[i] = {id:meals[i].id, foods:[]};
+      exportData.meals[i] = {meal_type:meals[i].name, foodIDs:[]};
       for(let x =0; x<meals[i].foods.length;x++){
-        exportData.meals[i].foods[x] = {
+        exportData.meals[i].foodIDs[x] = {
           food_id:meals[i].foods[x].food_id,
-          quantityIndex:meals[i].foods[x].quantityIndex,
-          quantityValue:meals[i].foods[x].quantityValue
+          serving_id:meals[i].foods[x].serving_id,
+          quantity:meals[i].foods[x].quantityValue
         }
       }
       logNutrition.calories += meals[i].nutrients.calories;
@@ -226,7 +232,7 @@ const FoodLog = () => {
       logNutrition.carbs += meals[i].nutrients.carbs;
       logNutrition.fats += meals[i].nutrients.fats;
   }}
-
+  console.log(exportData);
   //addMeal and deleteMeal use standard array functions to add to or remove from a single meal to the meals state array.
   function addMeal() {
     if(meals.some(meal => meal.name === mealname)) {
@@ -273,15 +279,18 @@ const FoodLog = () => {
   //Meal components are created by iterating through the meals state array.
   return (
     <div className="log">
-      <input onChange={e => mealname=e.target.value}></input>
-      <button onClick={addMeal}>Add meal</button>
-      <ul id="totals">
-        <li>Calories: {logNutrition.calories}</li>
-        <li>Protein: {logNutrition.protein}</li>
-        <li>Carbohydrates: {logNutrition.carbs}</li>
-        <li>Fats: {logNutrition.fats}</li>
-      </ul>
-      <ul>
+      <div>
+        <input onChange={e => mealname=e.target.value}></input>
+        <button onClick={addMeal}>Add meal</button>
+      </div>
+      <h3>Totals:</h3>
+      <div>
+        Calories: {logNutrition.calories}&nbsp;
+        Protein: {logNutrition.protein} &nbsp;
+        Carbohydrates: {logNutrition.carbs} &nbsp;
+        Fats: {logNutrition.fats}
+      </div>
+      <ul id='mealList'>
         {meals.map(
           (meal) => {
             //console.log(meal);

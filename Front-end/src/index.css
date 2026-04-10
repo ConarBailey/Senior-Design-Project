@@ -61,8 +61,8 @@ body {
   /* margin: 0 auto; */
   /* padding: 1rem; */
   /* overflow-y:hidden; */
-  color: whitesmoke;
-  background-color: dodgerblue;
+  color: black;
+  background-color: white;
   /* background-color: #fff; */
 } 
 
@@ -102,11 +102,12 @@ body {
   margin: 0 0 0 0;
   /* background-color: #a266f5; */
   background-color: blue;
-  color:orange;
+  color:white;
   padding: 0 5px;
   display: flex;
   justify-content:space-between;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .Header h1 {
@@ -115,17 +116,20 @@ body {
 }
 
 .AppLogo {
-  width: 100px;
-  height: 60px;
+  height: 126px;
   /* padding:0 10px; */
   margin:0;
-  border-radius: 3px;
+  position: absolute;
+  top:0;
+  left:0;
+  
 }
 
 .UTA {
-  width: 250px;
-  height: 60px;
+  width: 300px;
+  height: 70px;
   border-radius: 3px;
+  
 }
 
 .Header svg {
@@ -382,12 +386,12 @@ table {
   flex-grow: 1;
   padding: 1rem;
   overflow-y: auto;
-  background-color: dodgerblue;
-  color:white;
+  background-color: white;
+  color:black;
 }
 
 .Welcome h3 {
-  color:white;
+  color:black;
 }
 
 .post {
@@ -535,6 +539,7 @@ table {
   width: 200px;
   height: 200px;
   border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 255, 0.144), 0 6px 20px 0 rgba(0, 0, 255, 0.226);
 }
 .CopyRight {
   padding:0 500px;
@@ -681,4 +686,8 @@ button {
 ul {
   list-style-type: none;
   /* margin-bottom: 1rem; */
+}
+
+a:link {
+  text-decoration: none;
 }

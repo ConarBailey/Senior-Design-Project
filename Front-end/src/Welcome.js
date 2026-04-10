@@ -19,11 +19,10 @@ function WelcomePage() {
     //   }
     // }>
     <main className='Welcome'>
-      <center>
-        <h1>Welcome to Calorie Counter</h1><br/>
+      <center><br/>
         {/* <img className='Pic1' src='../iced-coffee.png'/> */}
         <img className='Pic1' src='../logo.png'/>
-        <br/><br/><a href="register"><h3>Sign-Up</h3></a><br/>
+        <br/><br/><a href="login"><h3>Sign-in</h3></a><a href="register"><h3>Sign-up</h3></a><br/>
         </center>
     </main>
   );
