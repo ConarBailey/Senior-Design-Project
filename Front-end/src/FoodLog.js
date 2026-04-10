@@ -3,8 +3,8 @@ import { useRef, useState } from 'react';
 import './FoodLog.css';
 import axios from './api/axios';
 import useAuth from './hooks/useAuth';
-const FOOD_ID_URL = './fatSecret';
-
+const FOOD_LOG_URL = '/foodlog';
+const FOOD_ID_URL = './fatsecret'
 
 
 function Food(props) {
@@ -133,7 +133,7 @@ function Meal(props) {
   async function search(foodName) {
   
           try {
-              const response = await axios.post(FOOD_ID_URL,
+              const response = await axios.post(FOOD_LOG_URL,
                   JSON.stringify({foodName}),
                   {
                       headers: {'Content-Type': 'application/json'},
@@ -212,10 +212,62 @@ const FoodLog = () => {
   console.log(meals);
   const {auth} = useAuth();
   const username = auth?.user
+  const [errMsg, setErrMsg] = useState('');
   var mealname = '';
   var logNutrition = {calories:0,protein:0,carbs:0,fats:0};
   var exportData = {username:username,logDate:selectedDate,meals:[]};
+  const data = {"username":"Brianna", "logDate": "04/10/2026", "calorieGoal": "1500", "meals":[
+    {"meal_type":"breakfast", "foodIDs":[{ "food_id":"1234",  "serving_id":"56789", "quantity":"2"}, {"food_id":"2155", "serving_id":"1256789", "quantity":"4"}] }, {"meal_type":"lunch", "foodIDs":[{ "food_id":"3947", "serving_id":"56789", "quantity":"5"}, {"food_id":"2155", "serving_id":"1256789", "quantity":"3" } ]}]}
   
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            setMeals(data)
+            const response = await axios.post(FOOD_LOG_URL,
+                JSON.stringify(data),
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    withCredentials: true
+                }
+            );
+            const result = response?.data
+            console.log(result);
+        } catch (err) {
+            if(!err?.response) {
+                setErrMsg('No Server Response');
+            } else if (err.response?.status === 400) {
+                setErrMsg('Missing foodId');
+            } else if (err.response?.status === 401) {
+                setErrMsg('Unauthorized');
+            } else {
+                setErrMsg('Login Failed');
+            }
+        }
+    }
+    const handleSubmit2 = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.get(FOOD_LOG_URL,
+                // JSON.stringify(data),
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    withCredentials: true
+                }
+            );
+            const result = response?.data
+            console.log('result =',result);
+        } catch (err) {
+            if(!err?.response) {
+                setErrMsg('No Server Response');
+            } else if (err.response?.status === 400) {
+                setErrMsg('Missing foodId');
+            } else if (err.response?.status === 401) {
+                setErrMsg('Unauthorized');
+            } else {
+                setErrMsg('Login Failed');
+            }
+        }
+    }
 
   if(meals.length>0){
     for(let i = 0; i<meals.length;i++){
@@ -279,6 +331,8 @@ const FoodLog = () => {
   //Meal components are created by iterating through the meals state array.
   return (
     <div className="log">
+      <button onClick={handleSubmit}>Send data to foodlog</button>
+      <button onClick={handleSubmit2}>Get data to foodlog</button>
       <div>
         <input onChange={e => mealname=e.target.value}></input>
         <button onClick={addMeal}>Add meal</button>

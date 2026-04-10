@@ -30,9 +30,9 @@ const userfoodlogSchema = new Schema({
     },    
     calorieGoal: {
         type: Number,
-        default: 2000
+        required: true
     },
-    creationDate: {
+    logDate: {
         type: Date,
         default: Date.now
     },
