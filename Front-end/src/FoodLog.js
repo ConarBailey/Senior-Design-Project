@@ -213,18 +213,7 @@ const FoodLog = () => {
   var mealname = '';
   var date = new Date();
   var logNutrition = {calories:0,protein:0,carbs:0,fats:0};
-  
-  if(date.getMonth<10){
-    var formattedDate = "0"+date.getMonth;
-  } else {
-    var formattedDate = date.getMonth;
-  }
-  if(date.getDate<10){
-    formattedDate = formattedDate+"/0"+date.getDate+"/"+date.getFullYear;
-  } else {
-    formattedDate = formattedDate+"/"+date.getDate+"/"+date.getFullYear;
-  }
-  var exportData = {username:username,logDate:formattedDate,meals:[]};
+  var exportData = {username:username,calorieGoal:2000,logDate:date,meals:[]};
 
   const handleSubmit = async (e) => {
         try {
@@ -277,9 +266,8 @@ const FoodLog = () => {
       logNutrition.carbs += meals[i].nutrients.carbs;
       logNutrition.fats += meals[i].nutrients.fats;
   }
-  handleSubmit();
   }
-  
+  handleSubmit();
   
 
   //addMeal and deleteMeal use standard array functions to add to or remove from a single meal to the meals state array.
