@@ -17,10 +17,6 @@ const foodIDSchema = new Schema({
 });
 
 const mealSchema = new Schema({
-    calorieGoal: {
-        type: Number,
-        required: true
-    },
     meal_type: {
         type: String,
         required: true
@@ -32,6 +28,10 @@ const userfoodlogSchema = new Schema({
         type: String,
         required: true
     },    
+    calorieGoal: {
+        type: Number,
+        required: true
+    },
     logDate: {
         type: Date,
         default: Date.now
