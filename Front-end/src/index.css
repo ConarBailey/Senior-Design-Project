@@ -210,6 +210,7 @@ body {
 .Nav li a {
   /* color: #fff; */
   color: black;
+  font-weight: bold;
   text-decoration: none;
 }
 
