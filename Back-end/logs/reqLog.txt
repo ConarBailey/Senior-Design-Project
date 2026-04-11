@@ -432,3 +432,17 @@
 20260410	15:28:27	01bb0624-fe36-4b9e-b98f-ccfb7d61d609	POST	undefined	/foodlog
 20260410	15:29:35	9da68b22-1264-4c02-a7e1-1b542efb32ba	POST	undefined	/foodlog
 20260410	15:56:15	9f73797a-8084-4398-afef-22ee20327890	POST	undefined	/foodlog
+20260410	16:25:04	6735b416-c49f-4357-8cbf-aa59415d91c2	POST	undefined	/foodlog
+20260410	16:25:11	1042f874-ddbe-4142-bdab-a08e76533249	GET	undefined	/foodlog
+20260410	16:25:29	bbfb0b4a-02b5-473e-80d1-a1ba95620b4e	GET	undefined	/foodlog/Laura
+20260410	16:25:39	1d6003ee-be87-4b69-8fe1-c5c07ce108bc	GET	undefined	/foodlog/Conar
+20260410	17:01:09	d876b490-bd73-4f8a-a816-1ea11528d9f6	OPTIONS	http://localhost:3000	/auth
+20260410	17:01:09	0cab3ada-9baa-4e04-ad3b-0a368d0d8709	POST	http://localhost:3000	/auth
+20260410	17:01:11	4fd2d8fa-aef1-4b8f-9fc4-1adb11d6ddc5	OPTIONS	http://localhost:3000	/foodlog
+20260410	17:01:11	216f588f-a6a3-4c15-884d-356cc99ea493	POST	http://localhost:3000	/foodlog
+20260410	17:01:11	d2b149f2-3d5a-45b6-b052-056739fe931e	POST	http://localhost:3000	/foodlog
+20260410	17:01:11	8deb0733-2b87-4c53-bda0-7599dd1a0367	POST	http://localhost:3000	/foodlog
+20260410	17:04:18	f1e424d2-f820-496f-8464-0c5b3d4b19af	GET	http://localhost:3000	/logout
+20260411	15:21:46	2d41b6b5-5112-4a8d-8124-beaad6ac6ee0	OPTIONS	http://localhost:3000	/auth
+20260411	15:21:46	943b3add-5b9d-4cd9-9b6b-092ddc8624e2	POST	http://localhost:3000	/auth
+20260411	15:21:51	0a3a88af-041b-4c47-8ad1-177acb6eb511	GET	http://localhost:3000	/foodlog/Laura
