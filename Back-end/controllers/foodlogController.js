@@ -26,15 +26,15 @@ const getUsersLog = async (req,res) => {
 }
 
 const getUserLog = async (req,res) => {
-    if(isNaN(parseInt(req.params.username))) {
+    if(req.params.username) {
         const userLog = await Userfoodlog.find({username:req.params.username});
         if (!userLog) return res.status(204).json({"message": `No name matches ${req.params.username}.`});
         res.json(userLog);
     }
     else {
-        const idLog = await Userfoodlog.find({_id:req.params.username});
-        if (!idLog) return res.status(204).json({"message": `No id matches ${req.params.username}.`});
-        res.json(idLog);
+        const usersLog = await Userfoodlog.find();
+        if (!usersLog) return res.status(204).json({'message':'No log found.'});
+        res.json(usersLog);
     }
 }
 
