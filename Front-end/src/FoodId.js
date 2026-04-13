@@ -25,6 +25,7 @@ const FoodId = () => {
             );
             const result = response?.data
             console.log(result);
+            console.log(result.food.servings.serving.findIndex((serving) => serving.serving_id == 1392))
             setfoodServices(result);
         } catch (err) {
             if(!err?.response) {

@@ -162,10 +162,10 @@ function Meal(props) {
     <div className='meal'>
       <div className='mealHeader'>
         <div className='mealName'><b>{props.name}</b></div>&nbsp;
-        Calories: {props.nutrients.calories}&nbsp;
-        Protein: {props.nutrients.protein}&nbsp;
-        Carbohydrates: {props.nutrients.carbs}&nbsp;
-        Fats: {props.nutrients.fats}
+        Calories: {Math.round(props.nutrients.calories)}&nbsp;
+        Protein: {Math.round(props.nutrients.protein)}&nbsp;
+        Carbohydrates: {Math.round(props.nutrients.carbs)}&nbsp;
+        Fats: {Math.round(props.nutrients.fats)}
         <button className='deleteMeal' onClick={handleDelete}>Delete meal</button>
       </div>
       <ul>
@@ -186,10 +186,10 @@ function Meal(props) {
         </select>&nbsp;
         <input id='quantitySelect' placeholder='Amount of servings' value={quantityValue} onChange={e => setQuantityValue(e.target.value)}></input>
         <button onClick={addFood}>Add food</button>
-        <p>Calories: {selectedFood.servings.serving[quantityType].calories*quantityValue}</p>
-        <p>Protein: {selectedFood.servings.serving[quantityType].protein*quantityValue}</p>
-        <p>Carbs: {selectedFood.servings.serving[quantityType].carbohydrate*quantityValue}</p>
-        <p>Fats: {selectedFood.servings.serving[quantityType].fat*quantityValue}</p>
+        <p>Calories: {Math.round(selectedFood.servings.serving[quantityType].calories*quantityValue)}</p>
+        <p>Protein: {Math.round(selectedFood.servings.serving[quantityType].protein*quantityValue)}</p>
+        <p>Carbs: {Math.round(selectedFood.servings.serving[quantityType].carbohydrate*quantityValue)}</p>
+        <p>Fats: {Math.round(selectedFood.servings.serving[quantityType].fat*quantityValue)}</p>
       </div>
       <ul id={hideResults}>
         {foodResults.map(
@@ -210,6 +210,7 @@ const FoodLog = () => {
   const {auth} = useAuth();
   const username = auth?.user
   const [errMsg, setErrMsg] = useState('');
+  const [logs, setLogs] = useState([]);
   var mealname = '';
   var date = new Date();
   var logNutrition = {calories:0,protein:0,carbs:0,fats:0};
@@ -228,7 +229,8 @@ const FoodLog = () => {
             const result = response?.data
             console.log(result);
             } else {
-              const response = await axios.get(FOOD_LOG_URL,
+              const URL = FOOD_LOG_URL + "/" + username
+              const response = await axios.get(URL,
                 {
                     headers: {'Content-Type': 'application/json'},
                     withCredentials: true
@@ -236,6 +238,7 @@ const FoodLog = () => {
             );
             const result = response?.data
             console.log(result);
+            setLogs(result);
             }
             
         } catch (err) {
@@ -267,7 +270,9 @@ const FoodLog = () => {
       logNutrition.fats += meals[i].nutrients.fats;
   }
   }
-  handleSubmit();
+  if(meals.length>0 || logs.length==0){
+    handleSubmit();
+}
   
 
   //addMeal and deleteMeal use standard array functions to add to or remove from a single meal to the meals state array.
@@ -310,22 +315,89 @@ const FoodLog = () => {
     };}
     setMeals([...meals]);
   }
+
+  async function importLog(logIndex) {
+    var selectedFood;
+    var mealArray = [];
+    if(logIndex<0){return;}
+    for(let i = 0; i<logs[logIndex].meals.length;i++){
+      mealArray.push({id:i, name:logs[logIndex].meals[i].meal_type, foods:[], nutrients:{calories:0, protein:0, carbs:0, fats:0}})
+      for(let z = 0; z<logs[logIndex].meals[i].foodIDs.length;z++){
+        console.log(logs[logIndex].meals[i].foodIDs[z].food_id);
+        let foodId = logs[logIndex].meals[i].foodIDs[z].food_id;
+        try {   
+                const response = await axios.post(FOOD_ID_URL,
+                    JSON.stringify({foodId}),
+                    {
+                        headers: {'Content-Type': 'application/json'},
+                        withCredentials: true
+                    }
+                );
+                const result = response?.data;
+                selectedFood=result.food;
+                console.log(selectedFood);
+                var quantityType=selectedFood.servings.serving.findIndex((serving) => serving.serving_id == logs[logIndex].meals[i].foodIDs[z].serving_id);
+                mealArray[i].foods.push({
+                id:z,
+                food_id:selectedFood.food_id, 
+                food_name:selectedFood.food_name, 
+                serving_id:logs[logIndex].meals[i].foodIDs[z].serving_id,
+                quantityIndex:quantityType, 
+                quantityValue:logs[logIndex].meals[i].foodIDs[z].quantity, 
+                quantityName:selectedFood.servings.serving[quantityType].measurement_description,
+                quantity:logs[logIndex].meals[i].foodIDs[z].quantity *  selectedFood.servings.serving[quantityType].number_of_units + " " + selectedFood.servings.serving[quantityType].measurement_description, 
+                calories: selectedFood.servings.serving[quantityType].calories*logs[logIndex].meals[i].foodIDs[z].quantity,
+                protein: selectedFood.servings.serving[quantityType].protein*logs[logIndex].meals[i].foodIDs[z].quantity,
+                carbs: selectedFood.servings.serving[quantityType].carbohydrate*logs[logIndex].meals[i].foodIDs[z].quantity,
+                fats: selectedFood.servings.serving[quantityType].fat*logs[logIndex].meals[i].foodIDs[z].quantity
+                });
+                mealArray[i].nutrients.calories += mealArray[i].foods[z].calories;
+                mealArray[i].nutrients.protein += mealArray[i].foods[z].protein;
+                mealArray[i].nutrients.carbs += mealArray[i].foods[z].carbs;
+                mealArray[i].nutrients.fats += mealArray[i].foods[z].fats;
+            } catch (err) {
+              console.log(err);
+                if(!err?.response) {
+                    setErrMsg('No Server Response');
+                } else if (err.response?.status === 400) {
+                    setErrMsg('Missing foodId');
+                } else if (err.response?.status === 401) {
+                    setErrMsg('Unauthorized');
+                } else {
+                    setErrMsg('Login Failed');
+                }
+            }
+      }
+    }
+    
+    console.log(mealArray);
+    setMeals(mealArray);
+  }
   
   //Returns html forms that create meal components.
   //The meal components are returned in an unordered list.
   //Meal components are created by iterating through the meals state array.
   return (
     <div className="log">
+      <p id='error'>{errMsg}</p>
       <div>
         <input onChange={e => mealname=e.target.value}></input>
         <button onClick={addMeal}>Add meal</button>
       </div>
       <h3>Totals:</h3>
       <div>
-        Calories: {logNutrition.calories}&nbsp;
-        Protein: {logNutrition.protein} &nbsp;
-        Carbohydrates: {logNutrition.carbs} &nbsp;
-        Fats: {logNutrition.fats}
+        Calories: {Math.round(logNutrition.calories)}&nbsp;
+        Protein: {Math.round(logNutrition.protein)} &nbsp;
+        Carbohydrates: {Math.round(logNutrition.carbs)} &nbsp;
+        Fats: {Math.round(logNutrition.fats)}
+      </div>
+      <div>
+        <select name="logs" id="logs" onChange={e => importLog(e.target.value)}>
+          <option value={-1}>Import a log</option>
+          {logs.map( (log,index) =>
+            <option value={index}>{log.logDate}</option>
+          )}
+        </select>
       </div>
       <ul id='mealList'>
         {meals.map(
