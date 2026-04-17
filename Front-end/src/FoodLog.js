@@ -208,13 +208,41 @@ const FoodLog = () => {
   const [errMsg, setErrMsg] = useState('');
   const [logs, setLogs] = useState([]);
   const [modified,setModified] = useState(false)
+  const [newUser, setNewUser] = useState(true)
+  const [firstRender, setFirstRender] = useState(true)
   var mealname = '';
   var date = new Date();
   var logNutrition = {calories:0,protein:0,carbs:0,fats:0};
   var exportData = {username:username,calorieGoal:2000,logDate:date,meals:[]};
+
+  const checkNewUser = async (e) => {
+    try{
+    const URL = FOOD_LOG_URL + "/" + username
+    const response = await axios.get(URL,
+              {
+                  headers: {'Content-Type': 'application/json'},
+                  withCredentials: true
+              }
+            );
+    const result = response?.data
+    if(result.length>0){setNewUser(false);}
+    } catch (err) {
+            if(!err?.response) {
+                setErrMsg('No Server Response');
+            } else if (err.response?.status === 400) {
+                setErrMsg('Missing foodId');
+            } else if (err.response?.status === 401) {
+                setErrMsg('Unauthorized');
+            } else {
+                setErrMsg('Login Failed');
+            }
+        }
+  }
   
   const handleSubmit = async (e) => {
     var logsHolder=[];
+    console.log(modified);
+    console.log(newUser);
         try {
             if(modified){
             const response1 = await axios.post(FOOD_LOG_URL,
@@ -223,7 +251,10 @@ const FoodLog = () => {
                     headers: {'Content-Type': 'application/json'},
                     withCredentials: true
                 }
-            );}
+            );
+            setModified(false);
+            }
+            if(!newUser){
             const URL = FOOD_LOG_URL + "/" + username
             const response2 = await axios.get(URL,
               {
@@ -242,8 +273,7 @@ const FoodLog = () => {
                 };
               } else {result2[i].logDate = new Date(result2[i].logDate); logsHolder.push(result2[i]);}
             }
-            setLogs(logsHolder);
-            
+            setLogs(logsHolder);}
         } catch (err) {
             if(!err?.response) {
                 setErrMsg('No Server Response');
@@ -255,8 +285,9 @@ const FoodLog = () => {
                 setErrMsg('Login Failed');
             }
         }
-        setModified(false);
     }
+  
+  if(firstRender){checkNewUser();setFirstRender(false);}
 
   if(meals.length>0){
     for(let i = 0; i<meals.length;i++){
@@ -274,10 +305,8 @@ const FoodLog = () => {
       logNutrition.fats += meals[i].nutrients.fats;
   }
   }
-  if((meals.length>0 && modified) || logs.length===0){
-    handleSubmit();
-  }
   
+  if((!newUser && logs.length<1) || modified){handleSubmit();}
 
   //addMeal and deleteMeal use standard array functions to add to or remove from a single meal to the meals state array.
   function addMeal() {
