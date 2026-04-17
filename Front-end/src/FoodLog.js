@@ -65,7 +65,6 @@ function Meal(props) {
                     }
                 );
                 const result = response?.data
-                console.log(result);
                 setSelectedFood(result.food);
                 setHideResults("hideResults")
                 setHideSelection("showSelection")
@@ -140,7 +139,6 @@ function Meal(props) {
                   }
               );
               const result = response?.data
-              console.log(result);
               setFoodResults(result.foods.food);
           } catch (err) {
               if(!err?.response) {
@@ -171,7 +169,6 @@ function Meal(props) {
       <ul>
         {foods.map(
           (food) => {
-            //console.log(food);
             return(<Food key={food.id} index={food.id} name={food.food_name} quantity={food.quantity} delete={deleteFood} />);
           }
         )}
@@ -195,7 +192,6 @@ function Meal(props) {
         {foodResults.map(
           (food,index) =>
           {
-            //console.log(food);
             return(<SearchResult key={index} food_name={food.food_name} brand_name={food.brand_name} food_id={food.food_id} select={selectResult}/>);
           }
         )}
@@ -211,35 +207,42 @@ const FoodLog = () => {
   const username = auth?.user
   const [errMsg, setErrMsg] = useState('');
   const [logs, setLogs] = useState([]);
+  const [modified,setModified] = useState(false)
   var mealname = '';
   var date = new Date();
   var logNutrition = {calories:0,protein:0,carbs:0,fats:0};
   var exportData = {username:username,calorieGoal:2000,logDate:date,meals:[]};
-
+  
   const handleSubmit = async (e) => {
+    var logsHolder=[];
         try {
-            if(meals.length>0)
-            {const response = await axios.post(FOOD_LOG_URL,
+            if(modified){
+            const response1 = await axios.post(FOOD_LOG_URL,
                 JSON.stringify(exportData),
                 {
                     headers: {'Content-Type': 'application/json'},
                     withCredentials: true
                 }
+            );}
+            const URL = FOOD_LOG_URL + "/" + username
+            const response2 = await axios.get(URL,
+              {
+                  headers: {'Content-Type': 'application/json'},
+                  withCredentials: true
+              }
             );
-            const result = response?.data
-            console.log(result);
-            } else {
-              const URL = FOOD_LOG_URL + "/" + username
-              const response = await axios.get(URL,
-                {
-                    headers: {'Content-Type': 'application/json'},
-                    withCredentials: true
-                }
-            );
-            const result = response?.data
-            console.log(result);
-            setLogs(result);
+            const result2 = response2?.data
+            for(let i=0;i<result2.length;i++){
+              if(i<result2.length-1){
+                let currentLog = new Date(result2[i].logDate);
+                result2[i].logDate = currentLog;
+                let nextLog = new Date(result2[i+1].logDate);
+                if(currentLog.getDay() !== nextLog.getDay()){
+                  logsHolder.push(result2[i]);
+                };
+              } else {result2[i].logDate = new Date(result2[i].logDate); logsHolder.push(result2[i]);}
             }
+            setLogs(logsHolder);
             
         } catch (err) {
             if(!err?.response) {
@@ -252,6 +255,7 @@ const FoodLog = () => {
                 setErrMsg('Login Failed');
             }
         }
+        setModified(false);
     }
 
   if(meals.length>0){
@@ -270,15 +274,15 @@ const FoodLog = () => {
       logNutrition.fats += meals[i].nutrients.fats;
   }
   }
-  if(meals.length>0 || logs.length==0){
+  if((meals.length>0 && modified) || logs.length===0){
     handleSubmit();
-}
+  }
   
 
   //addMeal and deleteMeal use standard array functions to add to or remove from a single meal to the meals state array.
   function addMeal() {
     if(meals.some(meal => meal.name === mealname)) {
-      alert("Each meal must have its own name.")
+      setErrMsg("Each meal must have its own name.")
     } else{
       if(meals.length>0){
         setMeals([
@@ -289,6 +293,7 @@ const FoodLog = () => {
         setMeals([{id:0, name:mealname, foods:[], nutrients:{calories:0, protein:0, carbs:0, fats:0}}])
       }
     };
+    setModified(true);
   }
 
   function deleteMeal(mealid){
@@ -301,6 +306,7 @@ const FoodLog = () => {
     setMeals(
       [...mealsCopy]
     );
+    setModified(true);
   }
 
   function editFood(mealid,foods){
@@ -314,6 +320,7 @@ const FoodLog = () => {
             meals[mealid].nutrients.fats += meals[mealid].foods[i].fats;
     };}
     setMeals([...meals]);
+    setModified(true);
   }
 
   async function importLog(logIndex) {
@@ -323,7 +330,6 @@ const FoodLog = () => {
     for(let i = 0; i<logs[logIndex].meals.length;i++){
       mealArray.push({id:i, name:logs[logIndex].meals[i].meal_type, foods:[], nutrients:{calories:0, protein:0, carbs:0, fats:0}})
       for(let z = 0; z<logs[logIndex].meals[i].foodIDs.length;z++){
-        console.log(logs[logIndex].meals[i].foodIDs[z].food_id);
         let foodId = logs[logIndex].meals[i].foodIDs[z].food_id;
         try {   
                 const response = await axios.post(FOOD_ID_URL,
@@ -335,7 +341,6 @@ const FoodLog = () => {
                 );
                 const result = response?.data;
                 selectedFood=result.food;
-                console.log(selectedFood);
                 var quantityType=selectedFood.servings.serving.findIndex((serving) => serving.serving_id == logs[logIndex].meals[i].foodIDs[z].serving_id);
                 mealArray[i].foods.push({
                 id:z,
@@ -370,7 +375,6 @@ const FoodLog = () => {
       }
     }
     
-    console.log(mealArray);
     setMeals(mealArray);
   }
   
@@ -395,14 +399,13 @@ const FoodLog = () => {
         <select name="logs" id="logs" onChange={e => importLog(e.target.value)}>
           <option value={-1}>Import a log</option>
           {logs.map( (log,index) =>
-            <option value={index}>{log.logDate}</option>
+            <option value={index}>{log.logDate.getMonth()+1}/{log.logDate.getDate()}/{log.logDate.getFullYear()}</option>
           )}
         </select>
       </div>
       <ul id='mealList'>
         {meals.map(
           (meal) => {
-            //console.log(meal);
             return(<Meal className="meal" key={meal.id} id={meal.id} name={meal.name}  delete={deleteMeal} nutrients={meal.nutrients} foods={meal.foods} editFood={editFood}/>);
           }
         )}
