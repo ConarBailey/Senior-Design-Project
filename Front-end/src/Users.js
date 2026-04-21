@@ -48,12 +48,14 @@ const Users = () => {
                                 <th>User Name</th>
                                 <th>ID</th>
                                 <th>Role</th>
+                                <th>Email</th>
                             </tr>
                             {users.sort((a, b) => a.username.localeCompare(b.username)).map((user, i) => (
                                 <tr key={i}>
                                     <td>{user?.username}</td>
                                     <td>{user?._id}</td>
                                     <td>{user?.roles?.Admin ? 'Admin': 'User'}</td>
+                                    <td>{user?.email}</td>
                                 </tr>
                             ))}
                         </tbody>

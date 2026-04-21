@@ -8,7 +8,7 @@ const FoodId = () => {
     const {auth} = useAuth();
     const username = auth?.user
     const [foodName, setfoodName] = useState('cheeseburger');
-    const [errMsg, setErrMsg] = useState('Please enter a food name to get the basic nutrition');
+    const [errMsg, setErrMsg] = useState('Good nutrition can reduce your risk of disease. It can support healing and your mental health.');
     const errRef = useRef();
     const [foodServices, setfoodServices] = useState();
 
@@ -74,7 +74,7 @@ const FoodId = () => {
                             ))}
                         </tbody>
                     </table>
-                ) : <center><p></p></center>
+                ) : <center><p>{errMsg}</p></center>
             }
             </div>
         </main>

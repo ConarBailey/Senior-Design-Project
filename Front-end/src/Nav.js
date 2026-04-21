@@ -19,7 +19,7 @@ const Nav = ({ search, setSearch }) => {
             <ul>
                 {!auth?.user && (<li><Link to="login">Sign-In</Link></li>)}
                 {auth?.user && (<li><Link to="userFoodLog">User Log</Link></li>)}
-                {auth?.user && (<li><Link to="foodID">Food-ID</Link></li>)}
+                {auth?.user && (<li><Link to="foodID">Nutrients</Link></li>)}
                 {auth?.user && (<li><Link to="foodName">Nutrition</Link></li>)}
                 {auth?.user && (<li><Link to="foodLog">Food Log</Link></li>)}
                 {auth?.user && auth.roles.includes(5150) && (<li><Link to="admin">Admin</Link></li>)}

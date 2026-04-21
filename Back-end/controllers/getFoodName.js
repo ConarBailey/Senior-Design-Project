@@ -4,7 +4,7 @@ async function getFoodName(accessToken,foodName) {
     const apiParams = new URLSearchParams();
     apiParams.append('method', 'foods.search');
     apiParams.append('search_expression', foodName); 
-    apiParams.append('max_results', '10');
+    apiParams.append('max_results', '20');
     apiParams.append('format', 'json'); 
 
     try {
