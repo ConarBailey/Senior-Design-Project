@@ -139,7 +139,9 @@ function Meal(props) {
                   }
               );
               const result = response?.data
-              setFoodResults(result.foods.food);
+              if(result.foods.food.length>0){
+                setFoodResults(result.foods.food);
+              }
           } catch (err) {
               if(!err?.response) {
                   setErrMsg('No Server Response');
