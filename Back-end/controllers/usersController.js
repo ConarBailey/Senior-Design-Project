@@ -12,9 +12,13 @@ const deleteUser = async (req, res) => {
     if (!user) {
         return res.status(204).json({ 'message': `User ID ${req.body.id} not found` });
     }
+    else if (user.roles.Admin) {
+        return res.status(403).json({ 'message': `Unauthorized to delete Admin account` });
+    }
     const result = await user.deleteOne({ _id: req.body.id });
     res.json(result);
 }
+
 
 const getUser = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ "message": 'User ID required' });
