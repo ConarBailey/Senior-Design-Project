@@ -1,19 +1,17 @@
 import { Link } from "react-router-dom";
 import Users from './Users';
+import DeleteID from './DeleteID';
 
 const Admin = () => {
     return (
         <main className='Admin'>
-            <h1>Admins Page</h1>
-            <br />
+            <div className="split-container-Admin">
+                <h1>Admins Page</h1>
+            </div>
             <div className="tools">
                 <Users />
-                <button>Delete User</button>
+                <DeleteID />
             </div>
-
-            {/* <div className="flexGrow">
-                <Link to="/Welcome">Home</Link>
-            </div> */}
         </main>
     )
 }

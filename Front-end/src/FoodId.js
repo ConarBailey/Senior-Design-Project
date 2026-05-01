@@ -8,8 +8,8 @@ const FoodId = () => {
     const [foodId, setfoodId] = useState('1234');
     const {auth} = useAuth();
     const username = auth?.user
-    const [errMsg, setErrMsg] = useState('');
-    // const {errMsg, setErrMsg} = useState('Please enter a food name to get the basic nutrition');
+//    const [errMsg, setErrMsg] = useState('');
+    const {errMsg, setErrMsg} = useState('Nutrients are essential substances obtained from food that provide energy, build structures, and regulate bodily functions. They are categorized into macronutrients (carbohydrates, protein, fats) and micronutrients (vitamins, minerals).');
     const errRef = useRef();
     const [foodServices, setfoodServices] = useState();
     const handleSubmit = async (e) => {
@@ -68,8 +68,11 @@ const FoodId = () => {
                                 <th>Fat</th>
                                 <th>Protein</th>
                                 <th>Sodium</th>
+                                <th>Fiber</th>
                                 <th>Cholesterol</th>
                                 <th>Carbohydrate</th>
+                                <th>Vitamin A</th>
+                                <th>Vitamin C</th>
                             </tr>
                             {foodServices.food.servings.serving.map((serving, i) => (
                                 <tr key={i}>
@@ -78,13 +81,16 @@ const FoodId = () => {
                                     <td>{serving.fat}</td>
                                     <td>{serving.protein}</td>
                                    <td>{serving.sodium}</td>
+                                   <td>{serving.fiber}</td>
                                    <td>{serving.cholesterol}</td>
                                    <td>{serving.carbohydrate}</td>
+                                   <td>{serving.vitamin_a}</td>
+                                   <td>{serving.vitamin_c}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                ) : <p></p>
+                ) : <p>{errMsg}</p>
             }
             </div>
         </main>
